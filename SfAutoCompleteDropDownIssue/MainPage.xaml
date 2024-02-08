@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="SfAutoCompleteDropDownIssue.MainPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SfAutoCompleteDropDownIssue"
+             xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs">
+
+    <ContentPage.BindingContext>
+        <local:MainViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout VerticalOptions="Start" Margin="10,50">
+        <editors:SfAutocomplete Text="{Binding SearchText, Mode=TwoWay}"
+                                ItemsSource="{Binding SearchItems}"
+                                Placeholder="Enter search text"
+                                DisplayMemberPath="Text" />
+
+        <Label IsVisible="{Binding IsSearching}"
+               Text="Searching..."
+               Margin="10" />
+    </StackLayout>
+
+</ContentPage>
