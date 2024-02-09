@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace SfAutoCompleteDropDownIssue
 {
@@ -10,7 +11,7 @@ namespace SfAutoCompleteDropDownIssue
 
     public class MainViewModel : INotifyPropertyChanged
     {
-        private const int MIN_CHARS = 2;
+        private const int MIN_CHARS = 3;
 
         // PropertyChanged Handling
 
@@ -33,8 +34,12 @@ namespace SfAutoCompleteDropDownIssue
         private ObservableCollection<SearchItem> searchItems;
         public ObservableCollection<SearchItem> SearchItems
         {
-            get { return searchItems; }
-            set { searchItems = value; OnPropertyChanged(nameof(SearchItems)); }
+            get => searchItems;
+            set
+            {
+                searchItems = value;
+                OnPropertyChanged(nameof(SearchItems));
+            }
         }
 
         private string? searchText;
@@ -53,14 +58,18 @@ namespace SfAutoCompleteDropDownIssue
         public bool IsSearching
         {
             get => isSearching;
-            set { isSearching = value; OnPropertyChanged(nameof(IsSearching)); }
+            set
+            {
+                isSearching = value;
+                OnPropertyChanged(nameof(IsSearching));
+            }
         }
 
         // Search
 
         private void DoSearch()
         {
-            if (!string.IsNullOrEmpty(searchText) && searchText.Length >= MIN_CHARS && SearchItems.Count == 0)
+            if (!string.IsNullOrEmpty(searchText) && searchText.Length >= MIN_CHARS && SearchItems.Count == 0 && !IsSearching)
             {
                 DoMockSearchAsync();
             }
@@ -72,10 +81,11 @@ namespace SfAutoCompleteDropDownIssue
 
         private async void DoMockSearchAsync()
         {
+            Debug.Print("Performing mock search...");
             IsSearching = true;
 
             // simulate web api call
-            await Task.Delay(1500);  
+            await Task.Delay(1500);
             var mockItems = new string[]
             {
                 "Item1", "Item2", "Item3", "Item4", "Item5", "Item6", "Item7", "Item8", "Item9", "Item10",
@@ -83,6 +93,7 @@ namespace SfAutoCompleteDropDownIssue
             };
 
             // add items to collection
+            Debug.Print("... adding items to collection");
             SearchItems.Clear();
             foreach (string item in mockItems)
             {
